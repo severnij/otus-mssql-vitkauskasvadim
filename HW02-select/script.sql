@@ -25,7 +25,8 @@ USE WideWorldImporters
 */
 
 SELECT
-	TOP 10 *
+	StockItemID,
+	StockItemName
 
 FROM Warehouse.StockItems
 

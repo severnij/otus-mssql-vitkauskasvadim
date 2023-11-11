@@ -43,7 +43,15 @@ WHERE
 По каким колонкам делать JOIN подумайте самостоятельно.
 */
 
-напишите здесь свое решение
+SELECT
+	TOP 10
+	sups.SupplierID,
+	sups.SupplierName,
+	ords.*
+
+FROM
+	Purchasing.Suppliers AS sups
+	LEFT JOIN Purchasing.PurchaseOrders AS ords ON sups.SupplierID = ords.SupplierID;
 
 /*
 3. Заказы (Orders) с ценой товара (UnitPrice) более 100$ 

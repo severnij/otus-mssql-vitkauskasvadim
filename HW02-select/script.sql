@@ -44,14 +44,15 @@ WHERE
 */
 
 SELECT
-	TOP 10
 	sups.SupplierID,
-	sups.SupplierName,
-	ords.*
+	sups.SupplierName
 
 FROM
 	Purchasing.Suppliers AS sups
-	LEFT JOIN Purchasing.PurchaseOrders AS ords ON sups.SupplierID = ords.SupplierID;
+	LEFT JOIN
+		Purchasing.PurchaseOrders AS ords ON sups.SupplierID = ords.SupplierID
+WHERE
+	ords.SupplierID IS NULL;
 
 /*
 3. Заказы (Orders) с ценой товара (UnitPrice) более 100$ 

@@ -28,7 +28,8 @@ SELECT
 	StockItemID,
 	StockItemName
 
-FROM Warehouse.StockItems
+FROM
+	Warehouse.StockItems
 
 WHERE
 	StockItemName LIKE '%urgent%'

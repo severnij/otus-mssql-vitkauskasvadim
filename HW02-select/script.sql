@@ -27,7 +27,11 @@ USE WideWorldImporters
 SELECT
 	TOP 10 *
 
-FROM Warehouse.StockItems;
+FROM Warehouse.StockItems
+
+WHERE
+	StockItemName LIKE '%urgent%'
+	OR StockItemName LIKE 'Animal%';
 
 /*
 2. Поставщиков (Suppliers), у которых не было сделано ни одного заказа (PurchaseOrders).

@@ -47,12 +47,9 @@ SELECT
 	sups.SupplierID,
 	sups.SupplierName
 
-FROM
-	Purchasing.Suppliers AS sups
-	LEFT JOIN
-		Purchasing.PurchaseOrders AS ords
-			ON
-				sups.SupplierID = ords.SupplierID
+FROM Purchasing.Suppliers AS sups
+	LEFT JOIN Purchasing.PurchaseOrders AS ords
+			ON sups.SupplierID = ords.SupplierID
 WHERE
 	ords.SupplierID IS NULL;
 

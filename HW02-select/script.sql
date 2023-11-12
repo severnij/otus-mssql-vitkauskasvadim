@@ -181,4 +181,14 @@ ORDER BY
 Имя товара смотреть в таблице Warehouse.StockItems.
 */
 
-напишите здесь свое решение
+SELECT
+	DISTINCT so.CustomerID,
+	sc.CustomerName
+
+FROM Sales.Orders AS so
+	LEFT JOIN Sales.OrderLines AS sol ON so.OrderID = sol.OrderID
+		LEFT JOIN Warehouse.StockItems AS whsi ON sol.StockItemID = whsi.StockItemID
+	LEFT JOIN Sales.Customers AS sc ON so.CustomerID = sc.CustomerID
+
+WHERE
+	whsi.StockItemName = 'Chocolate frogs 250g';

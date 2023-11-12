@@ -72,7 +72,55 @@ WHERE
 Таблицы: Sales.Orders, Sales.OrderLines, Sales.Customers.
 */
 
-напишите здесь свое решение
+SELECT
+	
+	o.OrderID,
+	CONVERT(varchar, o.OrderDate, 104) AS OrderDate,
+	DATENAME(MONTH, o.OrderDate) AS OrderMonth,
+	DATEPART(QUARTER, o.OrderDate) AS OrderQuarter,
+	CASE 
+		WHEN MONTH(o.OrderDate) BETWEEN 1 AND 4 THEN N'Первая Треть Года'
+		WHEN MONTH(o.OrderDate) BETWEEN 5 AND 8 THEN N'Вторая Треть Года'
+		WHEN MONTH(o.OrderDate) BETWEEN 9 AND 12 THEN N'Третья Треть Года'
+	END AS 'Треть Года',
+	c.CustomerName
+
+FROM Sales.Orders AS o
+	LEFT JOIN Sales.OrderLines AS ol ON o.OrderID = ol.OrderID
+	LEFT JOIN Sales.Customers AS c ON o.CustomerID = c.CustomerID
+
+WHERE
+	(ol.UnitPrice > 100 OR ol.Quantity > 20) AND ol.PickingCompletedWhen IS NOT NULL;
+
+
+DECLARE
+	@pagesize	BIGINT = 100, -- Размер страницы.
+	@pagenumber	BIGINT = 10; -- Номер страницы.
+
+SELECT
+	
+	o.OrderID,
+	CONVERT(varchar, o.OrderDate, 104) AS OrderDate,
+	DATENAME(MONTH, o.OrderDate) AS OrderMonth,
+	DATEPART(QUARTER, o.OrderDate) AS OrderQuarter,
+	CASE 
+		WHEN MONTH(o.OrderDate) BETWEEN 1 AND 4 THEN N'Треть Года 1'
+		WHEN MONTH(o.OrderDate) BETWEEN 5 AND 8 THEN N'Треть Года 2'
+		WHEN MONTH(o.OrderDate) BETWEEN 9 AND 12 THEN N'Треть Года 3'
+	END AS [Треть Года],
+	c.CustomerName
+
+FROM Sales.Orders AS o
+	LEFT JOIN Sales.OrderLines AS ol ON o.OrderID = ol.OrderID
+	LEFT JOIN Sales.Customers AS c ON o.CustomerID = c.CustomerID
+
+WHERE
+	(ol.UnitPrice > 100 OR ol.Quantity > 20) AND ol.PickingCompletedWhen IS NOT NULL
+	
+ORDER BY
+	OrderQuarter, [Треть Года], OrderDate
+
+OFFSET @pagesize * @pagenumber ROWS FETCH NEXT @pagesize ROWS ONLY;
 
 /*
 4. Заказы поставщикам (Purchasing.Suppliers),

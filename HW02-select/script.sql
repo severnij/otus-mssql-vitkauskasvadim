@@ -73,7 +73,6 @@ WHERE
 */
 
 SELECT
-	
 	o.OrderID,
 	CONVERT(varchar, o.OrderDate, 104) AS OrderDate,
 	DATENAME(MONTH, o.OrderDate) AS OrderMonth,
@@ -98,7 +97,6 @@ DECLARE
 	@pagenumber	BIGINT = 10; -- Номер страницы.
 
 SELECT
-	
 	o.OrderID,
 	CONVERT(varchar, o.OrderDate, 104) AS OrderDate,
 	DATENAME(MONTH, o.OrderDate) AS OrderMonth,

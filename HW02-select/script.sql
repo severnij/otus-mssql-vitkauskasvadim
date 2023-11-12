@@ -134,7 +134,27 @@ OFFSET @pagesize * @pagenumber ROWS FETCH NEXT @pagesize ROWS ONLY;
 Таблицы: Purchasing.Suppliers, Purchasing.PurchaseOrders, Application.DeliveryMethods, Application.People.
 */
 
-напишите здесь свое решение
+SELECT
+	TOP 10
+
+	dm.DeliveryMethodName,
+	po.ExpectedDeliveryDate,
+	s.SupplierName,
+	p.FullName
+
+FROM Purchasing.PurchaseOrders AS po
+	LEFT JOIN Application.DeliveryMethods AS dm ON po.DeliveryMethodID = dm.DeliveryMethodID
+	LEFT JOIN Purchasing.Suppliers AS s ON po.SupplierID = s.SupplierID
+	LEFT JOIN Application.People as p ON po.ContactPersonID = p.PersonID
+
+WHERE
+	YEAR(po.ExpectedDeliveryDate) = 2013
+	AND MONTH(po.ExpectedDeliveryDate) = 1
+	AND (
+		dm.DeliveryMethodName = 'Air Freight'
+		OR dm.DeliveryMethodName = 'Refrigerated Air Freight'
+	)
+	AND po.IsOrderFinalized = 1;
 
 /*
 5. Десять последних продаж (по дате продажи) с именем клиента и именем сотрудника,

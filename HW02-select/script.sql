@@ -160,7 +160,20 @@ WHERE
 Сделать без подзапросов.
 */
 
-напишите здесь свое решение
+SELECT
+	TOP 10 WITH TIES
+	
+	so.OrderID,
+	so.OrderDate,
+	sc.CustomerName,
+	ap.FullName
+
+FROM Sales.Orders AS so
+	LEFT JOIN Sales.Customers sc ON so.CustomerID = sc.CustomerID
+	LEFT JOIN Application.People AS ap ON so.SalespersonPersonID = ap.PersonID
+
+ORDER BY
+	so.OrderDate DESC;
 
 /*
 6. Все ид и имена клиентов и их контактные телефоны,

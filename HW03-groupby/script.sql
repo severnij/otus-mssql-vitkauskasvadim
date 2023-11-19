@@ -131,6 +131,7 @@ ORDER BY
 то этот месяц также отображался бы в результатах, но там были нули.
 */
 
+-- 2*
 SELECT
 	YEAR(i.InvoiceDate) as year,
 	MONTH(i.InvoiceDate) as month,
@@ -159,6 +160,50 @@ FROM [Sales].[Invoices] AS i
 GROUP BY
 	YEAR(i.InvoiceDate),
 	MONTH(i.InvoiceDate)
+
+ORDER BY
+	YEAR(i.InvoiceDate),
+	MONTH(i.InvoiceDate)
+
+-- 3*
+SELECT
+	YEAR(i.InvoiceDate) AS year,
+	MONTH(i.InvoiceDate) AS month,
+	ISNULL(stat.good, '-') as good,
+	ISNULL(MIN(stat.total_invoices_amount), 0) AS total_invoices_amount,
+	ISNULL(CAST(MIN(stat.first_invoice_date) AS varchar), '-') AS first_invoice_date,
+	ISNULL(MIN(stat.total_quantity), 0) AS total_quantity
+
+FROM [Sales].[Invoices] AS i
+	LEFT JOIN (
+		SELECT
+			YEAR(i.InvoiceDate) as year,
+			MONTH(i.InvoiceDate) as month,
+			si.StockItemName as good,
+			SUM(il.ExtendedPrice) AS total_invoices_amount,
+			MIN(i.InvoiceDate) AS first_invoice_date,
+			SUM(il.Quantity) AS total_quantity
+
+		FROM [Sales].[InvoiceLines] AS il
+			LEFT JOIN [Sales].[Invoices] AS i
+				ON il.InvoiceID = i.InvoiceID
+			LEFT JOIN [Warehouse].[StockItems] AS si
+				ON il.StockItemID = si.StockItemID
+
+		GROUP BY
+			YEAR(i.InvoiceDate),
+			MONTH(i.InvoiceDate),
+			si.StockItemName
+
+		HAVING
+			SUM(il.Quantity) < 50
+	) AS stat
+		ON YEAR(i.InvoiceDate) = stat.year AND MONTH(i.InvoiceDate) = stat.month
+
+GROUP BY
+	YEAR(i.InvoiceDate),
+	MONTH(i.InvoiceDate),
+	stat.good
 
 ORDER BY
 	YEAR(i.InvoiceDate),

@@ -48,6 +48,7 @@ GROUP BY
 ORDER BY
 	YEAR(i.InvoiceDate),
 	MONTH(i.InvoiceDate)
+
 /*
 2. Отобразить все месяцы, где общая сумма продаж превысила 4 600 000
 

@@ -130,3 +130,36 @@ ORDER BY
 Написать запросы 2-3 так, чтобы если в каком-то месяце не было продаж,
 то этот месяц также отображался бы в результатах, но там были нули.
 */
+
+SELECT
+	YEAR(i.InvoiceDate) as year,
+	MONTH(i.InvoiceDate) as month,
+	ISNULL(MIN(stat.total_invoices_amount), 0) AS total_invoices_amount
+
+FROM [Sales].[Invoices] AS i
+	LEFT JOIN (
+		SELECT
+			YEAR(i.InvoiceDate) as year,
+			MONTH(i.InvoiceDate) as month,
+			SUM(il.ExtendedPrice) AS total_invoices_amount
+
+		FROM [Sales].[InvoiceLines] AS il
+			LEFT JOIN [Sales].[Invoices] AS i
+				ON il.InvoiceID = i.InvoiceID
+
+		GROUP BY
+			YEAR(i.InvoiceDate),
+			MONTH(i.InvoiceDate)
+
+		HAVING
+			SUM(il.ExtendedPrice) > 4600000
+	) AS stat
+		ON YEAR(i.InvoiceDate) = stat.year AND MONTH(i.InvoiceDate) = stat.month
+
+GROUP BY
+	YEAR(i.InvoiceDate),
+	MONTH(i.InvoiceDate)
+
+ORDER BY
+	YEAR(i.InvoiceDate),
+	MONTH(i.InvoiceDate)

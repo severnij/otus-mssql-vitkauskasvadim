@@ -30,8 +30,24 @@ USE WideWorldImporters
 Продажи смотреть в таблице Sales.Invoices и связанных таблицах.
 */
 
-напишите здесь свое решение
+SELECT
+	YEAR(i.InvoiceDate),
+	MONTH(i.InvoiceDate),
+	AVG(il.UnitPrice) AS average_unit_price,
+	SUM(il.ExtendedPrice) AS total_invoices_amount
 
+FROM
+	[Sales].[InvoiceLines] AS il
+	LEFT JOIN [Sales].[Invoices] AS i
+		ON il.InvoiceID = i.InvoiceID
+
+GROUP BY
+	YEAR(i.InvoiceDate),
+	MONTH(i.InvoiceDate)
+
+ORDER BY
+	YEAR(i.InvoiceDate),
+	MONTH(i.InvoiceDate)
 /*
 2. Отобразить все месяцы, где общая сумма продаж превысила 4 600 000
 

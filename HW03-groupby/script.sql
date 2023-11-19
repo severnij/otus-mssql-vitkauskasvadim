@@ -59,7 +59,25 @@ ORDER BY
 Продажи смотреть в таблице Sales.Invoices и связанных таблицах.
 */
 
-напишите здесь свое решение
+SELECT
+	YEAR(i.InvoiceDate),
+	MONTH(i.InvoiceDate),
+	SUM(il.ExtendedPrice) AS total_invoices_amount
+
+FROM [Sales].[InvoiceLines] AS il
+	LEFT JOIN [Sales].[Invoices] AS i
+		ON il.InvoiceID = i.InvoiceID
+
+GROUP BY
+	YEAR(i.InvoiceDate),
+	MONTH(i.InvoiceDate)
+
+HAVING
+	SUM(il.ExtendedPrice) > 4600000
+
+ORDER BY
+	YEAR(i.InvoiceDate),
+	MONTH(i.InvoiceDate)
 
 /*
 3. Вывести сумму продаж, дату первой продажи

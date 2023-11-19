@@ -37,7 +37,8 @@ SELECT
 	SUM(il.ExtendedPrice) AS total_invoices_amount
 
 FROM [Sales].[InvoiceLines] AS il
-	LEFT JOIN [Sales].[Invoices] AS i ON il.InvoiceID = i.InvoiceID
+	LEFT JOIN [Sales].[Invoices] AS i
+		ON il.InvoiceID = i.InvoiceID
 
 GROUP BY
 	YEAR(i.InvoiceDate),

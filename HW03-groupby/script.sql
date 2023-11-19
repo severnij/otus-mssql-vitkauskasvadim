@@ -31,8 +31,8 @@ USE WideWorldImporters
 */
 
 SELECT
-	YEAR(i.InvoiceDate),
-	MONTH(i.InvoiceDate),
+	YEAR(i.InvoiceDate) AS year,
+	MONTH(i.InvoiceDate) AS month,
 	AVG(il.UnitPrice) AS average_unit_price,
 	SUM(il.ExtendedPrice) AS total_invoices_amount
 
@@ -60,8 +60,8 @@ ORDER BY
 */
 
 SELECT
-	YEAR(i.InvoiceDate),
-	MONTH(i.InvoiceDate),
+	YEAR(i.InvoiceDate) as year,
+	MONTH(i.InvoiceDate) as month,
 	SUM(il.ExtendedPrice) AS total_invoices_amount
 
 FROM [Sales].[InvoiceLines] AS il
@@ -96,7 +96,32 @@ ORDER BY
 Продажи смотреть в таблице Sales.Invoices и связанных таблицах.
 */
 
-напишите здесь свое решение
+SELECT
+	YEAR(i.InvoiceDate) as year,
+	MONTH(i.InvoiceDate) as month,
+	si.StockItemName as good,
+	SUM(il.ExtendedPrice) AS total_invoices_amount,
+	MIN(i.InvoiceDate) AS first_invoice_date,
+	SUM(il.Quantity) AS total_quantity
+
+FROM [Sales].[InvoiceLines] AS il
+	LEFT JOIN [Sales].[Invoices] AS i
+		ON il.InvoiceID = i.InvoiceID
+	LEFT JOIN [Warehouse].[StockItems] AS si
+		ON il.StockItemID = si.StockItemID
+
+GROUP BY
+	YEAR(i.InvoiceDate),
+	MONTH(i.InvoiceDate),
+	si.StockItemName
+
+HAVING
+	SUM(il.Quantity) < 50
+
+ORDER BY
+	YEAR(i.InvoiceDate),
+	MONTH(i.InvoiceDate),
+	si.StockItemName
 
 -- ---------------------------------------------------------------------------
 -- Опционально
